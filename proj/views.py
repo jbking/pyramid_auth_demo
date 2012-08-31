@@ -2,16 +2,17 @@ from pyramid.response import Response
 from pyramid.view import view_config
 
 from sqlalchemy.exc import DBAPIError
+from sqlahelper import get_session
 
 from .models import (
-    DBSession,
     MyModel,
     )
 
 @view_config(route_name='home', renderer='templates/mytemplate.pt')
 def my_view(request):
+    session = get_session()
     try:
-        one = DBSession.query(MyModel).filter(MyModel.name=='one').first()
+        one = session.query(MyModel).filter(MyModel.name=='one').first()
     except DBAPIError:
         return Response(conn_err_msg, content_type='text/plain', status_int=500)
     return {'one':one, 'project':'proj'}

@@ -3,6 +3,7 @@ import sys
 import transaction
 
 from sqlalchemy import engine_from_config
+from sqlahelper import get_session, add_engine
 
 from pyramid.paster import (
     get_appsettings,
@@ -10,7 +11,6 @@ from pyramid.paster import (
     )
 
 from ..models import (
-    DBSession,
     MyModel,
     Base,
     )
@@ -28,8 +28,9 @@ def main(argv=sys.argv):
     setup_logging(config_uri)
     settings = get_appsettings(config_uri)
     engine = engine_from_config(settings, 'sqlalchemy.')
-    DBSession.configure(bind=engine)
+    add_engine(engine)
+    session = get_session()
     Base.metadata.create_all(engine)
     with transaction.manager:
         model = MyModel(name='one', value=1)
-        DBSession.add(model)
+        session.add(model)
