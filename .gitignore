@@ -1,0 +1,4 @@
+*.sw?
+*.py?
+*.egg-info/
+.coverage
