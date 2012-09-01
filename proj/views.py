@@ -1,4 +1,4 @@
-from pyramid.security import remember, forget, authenticated_userid
+from pyramid.security import remember, forget, authenticated_userid, effective_principals
 from pyramid.response import Response
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config, forbidden_view_config
@@ -25,11 +25,16 @@ def forbidden(request):
 @view_config(route_name='remember')
 def remember_view(request):
     userid = authenticated_userid(request)
+    principals = effective_principals(request)
     if userid is None:
         headers = remember(request, 'friend')
-        return Response('<h1>I remember you</h1>', headers=headers)
+        message = '<h1>I remember you</h1>'
     else:
-        return Response('<h1>I know you :)</h1>')
+        headers = {}
+        message = '<h1>I know you :)</h1>'
+    message += '<ul>%s</ul>' % \
+               ''.join(['<li>%s</li>' % p for p in principals])
+    return Response(message, headers=headers)
 
 
 @view_config(route_name='forget')
