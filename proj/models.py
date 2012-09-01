@@ -1,4 +1,4 @@
-from pyramid.security import Allow, Everyone
+from pyramid.security import Allow, Everyone, Authenticated
 from sqlalchemy import (
     Column,
     Integer,
@@ -36,5 +36,5 @@ class MyModel(Base):
     @property
     def __acl__(self):
         return [
-            (Allow, Everyone, 'view'),
+            (Allow, Authenticated, 'view'),
         ]

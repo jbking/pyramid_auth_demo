@@ -19,6 +19,8 @@ def main(global_config, **settings):
     config.set_authorization_policy(authorization_policy)
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/', factory=find_object)
+    config.add_route('remember', '/remember')
+    config.add_route('forget', '/forget')
     config.scan()
     return config.make_wsgi_app()
 
