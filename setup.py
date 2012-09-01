@@ -15,6 +15,7 @@ requires = [
     'pyramid_debugtoolbar',
     'zope.sqlalchemy',
     'waitress',
+    'repoze.who',
     ]
 
 setup(name='proj',

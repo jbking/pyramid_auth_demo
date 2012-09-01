@@ -1,8 +1,11 @@
+import os
+from pprint import pprint
+
 from pyramid.config import Configurator
-from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from sqlalchemy import engine_from_config
 from sqlahelper import add_engine
+from pyramid_who.whov2 import WhoV2AuthenticationPolicy
 
 from proj.resources import find_object
 
@@ -12,7 +15,7 @@ def main(global_config, **settings):
     """
     engine = engine_from_config(settings, 'sqlalchemy.')
     add_engine(engine)
-    authentication_policy = AuthTktAuthenticationPolicy('seekrit')
+    authentication_policy = WhoV2AuthenticationPolicy(settings['who.url'], 'auth_tkt')
     authorization_policy = ACLAuthorizationPolicy()
     config = Configurator(settings=settings)
     config.set_authentication_policy(authentication_policy)
